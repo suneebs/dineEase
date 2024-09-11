@@ -1,4 +1,5 @@
 import Search from "./components/CarouselandSearch";
+import Footer from "./components/Footer";
 import MenuItems from "./components/MenuItems";
 import Nav from "./components/Nav";
 import { Button } from "./components/ui/button";
@@ -16,6 +17,9 @@ const App = () =>{
       </section>
       <section className="padding mt-20">
         <MenuItems />
+      </section>
+      <section>
+        <Footer />
       </section>
 
     </main>

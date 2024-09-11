@@ -1,5 +1,6 @@
 import { Button } from "./ui/button";
 import title from "@/assets/title-bg.png";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Nav = () => {
     return(
