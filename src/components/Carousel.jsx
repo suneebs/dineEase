@@ -8,20 +8,20 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
-
+const arr = ["ALL","Starters","Breakfast","Lunch","Dinner","Drinks","Ice-creams"]
 export function CarouselSpacing() {
   return (
     <div className="flex justify-center">
         
-        <Carousel className="max-w-sm">
+        <Carousel className="max-w-sm md:max-w-max ">
         {/* flex-shrink-0 w-1/3 sm:w-1/4 md:w-1/6 lg:w-1/5 xl:w-1/4 p-2 */}
       <CarouselContent className="-ml-1">
-        {Array.from({ length: 12 }).map((_, index) => (
-            <CarouselItem key={index} className="pl-1 md:basis-1/6 lg:basis-1/5">
+        {arr.map((item, index) => (
+            <CarouselItem key={index} className="pl-1 basis-1/3 md:basis-1/5 ">
             <div className="p-1">
-              <Card>
+              <Card className="cursor-pointer">
                 <CardContent className="flex items-center justify-center p-3">
-                  <span className="text-2xl font-semibold">{index + 1}</span>
+                  <span className="font-semibold">{item}</span>
                 </CardContent>
               </Card>
             </div>

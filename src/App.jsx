@@ -10,7 +10,7 @@ const App = () =>{
     <main className="relative">
       <Nav />
       <section className="flex justify-center pt-20">
-          <img src={menu} height={200} width={200} alt="menu" srcset="" />
+          <img src={menu} height={200} width={200} alt="menu" />
       </section>
       <section className="padding">
         <Search />
@@ -18,7 +18,7 @@ const App = () =>{
       <section className="padding mt-20">
         <MenuItems />
       </section>
-      <section>
+      <section className="bg-black flex justify-center">
         <Footer />
       </section>
 

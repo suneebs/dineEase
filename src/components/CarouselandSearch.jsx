@@ -13,7 +13,7 @@ const Search = () =>{
             </div>
             <div className="pl-2">
                 <Button className="bg-white">
-                    <img src={SearchIcon} width={20} height={20} alt="search" srcset="" />
+                    <img src={SearchIcon} width={20} height={20} alt="search"/>
                 </Button >
             </div>
             </section>
