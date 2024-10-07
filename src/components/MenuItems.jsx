@@ -1,74 +1,27 @@
 import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import logo from "@/assets/logo.jpg";
 import { Button } from './ui/button';
-import { useCart } from './cartToggle';
-
+import { Rat } from 'lucide-react';
+import { useDrawer } from './DrawerContext';
 const MenuItems = () => {
-
-    const { addToCart } = useCart(); // Get the addToCart function
+    const { addItemToCart, openDrawer } = useDrawer(); // Get addItemToCart and openDrawer from context
 
     const food = [
-        {
-            id:1,
-            title:'Chicken Biriyani',
-            time:23,
-            description:"This is one",
-            rate:100,
-        },
-        {
-            id:2,
-            title:'Mutton Biriyani',
-            time:23,
-            description:"This is one",
-            rate:180,
-        },
-        {
-            id:3,
-            title:'Beef Biriyani',
-            time:23,
-            description:"This is one",
-            rate:140,
-        },
-        {
-            id:4,
-            title:'Chicken Noodles',
-            time:23,
-            description:"This is one",
-            rate:80
-        },
-        {
-            id:5,
-            title:'Chicken Fried Rice',
-            time:23,
-            description:"This is one",
-            rate:90,
-        },
-        {
-            id:6,
-            title:'Mandi',
-            time:23,
-            description:"This is one",
-            rate:210
-        },
-        {
-            id:7,
-            title:'Shawarma',
-            time:23,
-            description:"This is one",
-            rate:120
-        },
-        {
-            id:8,
-            title:'Dragon Chicken',
-            time:23,
-            description:"This is one",
-            rate:150
-        }
-    ]
+        { id: 1, title: 'Chicken Biriyani', rate: 100 },
+        { id: 2, title: 'Chilly chicken', rate: 80 },
+        { id: 3, title: 'Fried rice', rate: 140 },
+        { id: 4, title: 'Dragon Chicken', rate: 230 },
+        { id: 5, title: 'Pepper Chicken', rate: 200 },
+        { id: 6, title: 'Meals', rate: 100 },
+        { id: 7, title: 'Porotta', rate: 10 },
+        { id: 8, title: 'Mandi', rate: 320 }
+    ];
 
     const handleAddToCart = (item) => {
-        addToCart(item); // Call the function to add item to the cart
+        addItemToCart(item);
+        openDrawer();
     };
+
     return(
         <div className="bg-slate-100 grid grid-cols-2 gap-8 pt-10 p-9 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {
@@ -84,9 +37,11 @@ const MenuItems = () => {
                                 </CardTitle>
                                 <CardDescription>
                                     <b>₹ {f.rate}</b>
+                                    <b>₹ {f.rate}</b>
                                 </CardDescription>
                         </CardContent>
                         <CardFooter className='flex justify-end'>
+                            <Button className='bg-green-400' onClick={() => handleAddToCart(f)}>ADD</Button>
                             <Button className='bg-green-400' onClick={() => handleAddToCart(f)}>ADD</Button>
                         </CardFooter>
                     </Card>
