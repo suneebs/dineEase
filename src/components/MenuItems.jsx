@@ -5,7 +5,7 @@ import { useDrawer } from './DrawerContext';
 import { useState } from 'react';
 
 const MenuItems = () => {
-    const { addItemToCart, openDrawer } = useDrawer();
+    const { addItemToCart, removeItemFromCart, openDrawer } = useDrawer();
     
     const food = [
         { id: 1, title: 'Chicken Biriyani', rate: 100 },
@@ -20,16 +20,23 @@ const MenuItems = () => {
 
     const [addedItems, setAddedItems] = useState(new Set());
 
-    const handleAddToCart = (item) => {
-        addItemToCart(item);
-        setAddedItems(prev => new Set(prev).add(item.id));
+    const handleToggleCartItem = (item) => {
+        if (addedItems.has(item.id)) {
+            // If the item is already in the cart, remove it
+            removeItemFromCart(item.id);
+            setAddedItems(prev => {
+                const newSet = new Set(prev);
+                newSet.delete(item.id);
+                return newSet;
+            });
+        } else {
+            // If the item is not in the cart, add it
+            addItemToCart(item);
+            setAddedItems(prev => new Set(prev).add(item.id));
+        }
     };
 
-    // const handleOpenDrawer = () => {
-    //     openDrawer();
-    // };
-
-    return(
+    return (
         <div className="bg-slate-100 grid grid-cols-2 gap-8 pt-10 p-9 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {
                 food.map(f => (
@@ -47,14 +54,14 @@ const MenuItems = () => {
                         </CardContent>
                         <CardFooter className='flex justify-end'>
                             <Button 
-                                className='bg-green-400'
+                                
                                 onClick={() => {
-                                    handleAddToCart(f);
-                                    handleOpenDrawer();
-                                }}
-                                disabled={addedItems.has(f.id)}
+                                    handleToggleCartItem(f);
+                                }
+                            }
+                            className='bg-green-400'
                             >
-                                {addedItems.has(f.id) ? 'Added' : 'ADD'}
+                                {addedItems.has(f.id) ? 'ADDED' : 'ADD'}
                             </Button>
                         </CardFooter>
                     </Card>

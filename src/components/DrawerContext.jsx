@@ -13,10 +13,14 @@ export const DrawerProvider = ({ children }) => {
     setCartItems((prevItems) => [...prevItems, item]);
   };
 
+  const removeItemFromCart = (itemId) => {
+    setCartItems((prevItems) => prevItems.filter(item => item.id !== itemId));
+};
+
   const itemCount = cartItems.length; // Count of items in the cart
 
   return (
-    <DrawerContext.Provider value={{ isOpen, openDrawer, closeDrawer, cartItems, addItemToCart, itemCount  }}>
+    <DrawerContext.Provider value={{ isOpen, openDrawer, closeDrawer, cartItems, addItemToCart, itemCount,removeItemFromCart  }}>
       {children}
     </DrawerContext.Provider>
   );
