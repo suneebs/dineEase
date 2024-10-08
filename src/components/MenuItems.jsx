@@ -2,10 +2,9 @@ import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
 import logo from "@/assets/logo.jpg";
 import { Button } from './ui/button';
 import { useDrawer } from './DrawerContext';
-import { useState } from 'react';
 
 const MenuItems = () => {
-    const { addItemToCart, removeItemFromCart, openDrawer } = useDrawer();
+    const { addItemToCart, removeItemFromCart, cartItems } = useDrawer();
     
     const food = [
         { id: 1, title: 'Chicken Biriyani', rate: 100 },
@@ -18,21 +17,14 @@ const MenuItems = () => {
         { id: 8, title: 'Mandi', rate: 320 }
     ];
 
-    const [addedItems, setAddedItems] = useState(new Set());
-
     const handleToggleCartItem = (item) => {
-        if (addedItems.has(item.id)) {
+        const existingItem = cartItems.find(i => i.id === item.id);
+        if (existingItem) {
             // If the item is already in the cart, remove it
             removeItemFromCart(item.id);
-            setAddedItems(prev => {
-                const newSet = new Set(prev);
-                newSet.delete(item.id);
-                return newSet;
-            });
         } else {
             // If the item is not in the cart, add it
             addItemToCart(item);
-            setAddedItems(prev => new Set(prev).add(item.id));
         }
     };
 
@@ -54,14 +46,12 @@ const MenuItems = () => {
                         </CardContent>
                         <CardFooter className='flex justify-end'>
                             <Button 
-                                
                                 onClick={() => {
                                     handleToggleCartItem(f);
-                                }
-                            }
-                            className='bg-green-400'
+                                }}
+                                className='bg-green-400'
                             >
-                                {addedItems.has(f.id) ? 'ADDED' : 'ADD'}
+                                {cartItems.some(item => item.id === f.id) ? 'ADDED' : 'ADD'}
                             </Button>
                         </CardFooter>
                     </Card>
