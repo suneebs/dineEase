@@ -1,21 +1,26 @@
 'use client';
 
+import { useState } from 'react';
 import { Drawer } from 'vaul';
 import { useDrawer } from './DrawerContext';
 import { Button } from './ui/button';
+import OrderModal from './OrderModal'; // Import the OrderModal
 
 export default function VaulDrawer() {
-  const { isOpen, closeDrawer, cartItems, increaseQuantity, decreaseQuantity, removeItemFromCart } = useDrawer();
-
+  const { isOpen, closeDrawer, cartItems, increaseQuantity, decreaseQuantity, removeItemFromCart,clearCart } = useDrawer();
+  
+  // Modal state
+  const [isModalOpen, setModalOpen] = useState(false);
+  
   // Calculate total cost
   const totalCost = cartItems.reduce((total, item) => total + item.rate * item.quantity, 0);
 
   // Function to handle order placement
+
   const handleOrder = () => {
-    // Here you can add logic to handle the order (e.g., sending it to an API)
     console.log('Order placed:', cartItems);
-    // Optionally clear the cart after placing the order
-    // clearCart(); // You would need to implement a clearCart function in your context
+    clearCart();
+    setModalOpen(true); // Open the modal
     closeDrawer(); // Close the drawer after placing the order
   };
 
@@ -59,6 +64,7 @@ export default function VaulDrawer() {
           </div>
         </Drawer.Content>
       </Drawer.Portal>
+      {isModalOpen && <OrderModal onClose={() => { setModalOpen(false); /* Optionally add logic to navigate back to the menu or add more items */ }} />}
     </Drawer.Root>
   );
 }

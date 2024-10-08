@@ -45,10 +45,13 @@ const decreaseQuantity = (itemId) => {
   );
 };
 
+const clearCart = () => {
+  setCartItems([]);
+};
   const itemCount = cartItems.length; // Count of items in the cart
 
   return (
-    <DrawerContext.Provider value={{ isOpen, openDrawer, closeDrawer, cartItems, addItemToCart, itemCount,removeItemFromCart, increaseQuantity, decreaseQuantity }}>
+    <DrawerContext.Provider value={{ isOpen, openDrawer, closeDrawer, cartItems, addItemToCart, itemCount,removeItemFromCart, increaseQuantity, decreaseQuantity,clearCart }}>
       {children}
     </DrawerContext.Provider>
   );
