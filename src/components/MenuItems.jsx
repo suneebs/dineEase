@@ -1,11 +1,12 @@
 import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import logo from "@/assets/logo.jpg";
 import { Button } from './ui/button';
-import { Rat } from 'lucide-react';
 import { useDrawer } from './DrawerContext';
-const MenuItems = () => {
-    const { addItemToCart, openDrawer } = useDrawer(); // Get addItemToCart and openDrawer from context
+import { useState } from 'react';
 
+const MenuItems = () => {
+    const { addItemToCart, openDrawer } = useDrawer();
+    
     const food = [
         { id: 1, title: 'Chicken Biriyani', rate: 100 },
         { id: 2, title: 'Chilly chicken', rate: 80 },
@@ -17,10 +18,16 @@ const MenuItems = () => {
         { id: 8, title: 'Mandi', rate: 320 }
     ];
 
+    const [addedItems, setAddedItems] = useState(new Set());
+
     const handleAddToCart = (item) => {
         addItemToCart(item);
-        openDrawer();
+        setAddedItems(prev => new Set(prev).add(item.id));
     };
+
+    // const handleOpenDrawer = () => {
+    //     openDrawer();
+    // };
 
     return(
         <div className="bg-slate-100 grid grid-cols-2 gap-8 pt-10 p-9 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
@@ -31,25 +38,30 @@ const MenuItems = () => {
                             <img src={logo} alt="logo" />
                         </CardHeader>
                         <CardContent>
-                            {/* <img src={logo}  alt="logo" /> */}
                             <CardTitle>
-                                    {f.title}
-                                </CardTitle>
-                                <CardDescription>
-                                    <b>₹ {f.rate}</b>
-                                    <b>₹ {f.rate}</b>
-                                </CardDescription>
+                                {f.title}
+                            </CardTitle>
+                            <CardDescription>
+                                <b>₹ {f.rate}</b>
+                            </CardDescription>
                         </CardContent>
                         <CardFooter className='flex justify-end'>
-                            <Button className='bg-green-400' onClick={() => handleAddToCart(f)}>ADD</Button>
-                            <Button className='bg-green-400' onClick={() => handleAddToCart(f)}>ADD</Button>
+                            <Button 
+                                className='bg-green-400'
+                                onClick={() => {
+                                    handleAddToCart(f);
+                                    handleOpenDrawer();
+                                }}
+                                disabled={addedItems.has(f.id)}
+                            >
+                                {addedItems.has(f.id) ? 'Added' : 'ADD'}
+                            </Button>
                         </CardFooter>
                     </Card>
                 ))
-                
             }
         </div>
-    )
+    );
 }
 
 export default MenuItems;

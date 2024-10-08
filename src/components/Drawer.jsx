@@ -11,7 +11,7 @@ export default function VaulDrawer() {
     <Drawer.Root open={isOpen} onOpenChange={closeDrawer}>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-black/40" onClick={closeDrawer} />
-        <Drawer.Content className="bg-gray-100 h-fit fixed bottom-0 left-0 right-0 outline-none">
+        <Drawer.Content className="bg-gray-100 h-fit fixed bottom-0 left-0 md:left-1/4 right-0 outline-none max-w-xl">
           <div className="p-4 bg-white">
             <div className='flex justify-end'>
             <Button className="bg-red-500 hover:bg-red-700" onClick={closeDrawer}>X</Button>
