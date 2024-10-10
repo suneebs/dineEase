@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 
-const OrderModal = ({ onClose, onGenerateBill }) => {
+const OrderModal = ({ onClose,onAddMore, onGenerateBill }) => {
   const [timeLeft, setTimeLeft] = useState(10); // 5 minutes in seconds
   const [orderPlaced, setOrderPlaced] = useState(false);
 
@@ -35,7 +35,9 @@ const OrderModal = ({ onClose, onGenerateBill }) => {
         <div className="flex justify-center mt-4">
             {orderPlaced ? 
             <>
-                <Button className="bg-green-500 hover:bg-green-700">ADD MORE </Button> 
+                <Button className="bg-green-500 hover:bg-green-700" onClick={onAddMore}>
+            Add More
+          </Button>
                 <Button className="bg-green-500 hover:bg-green-700 ml-3" onClick={onGenerateBill}>GENERATE BILL</Button>
             </>
             : ""}
