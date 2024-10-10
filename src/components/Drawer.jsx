@@ -4,15 +4,15 @@ import { useState } from 'react';
 import { Drawer } from 'vaul';
 import { useDrawer } from './DrawerContext';
 import { Button } from './ui/button';
-import OrderModal from './OrderModal'; // Import the OrderModal
-import BillModal from './BillModal'; // Import the BillModal
+import OrderModal from './OrderModal';
+import BillModal from './BillModal';
 
 export default function VaulDrawer() {
-  const { isOpen, closeDrawer, cartItems, increaseQuantity, decreaseQuantity, removeItemFromCart, clearCart } = useDrawer();
+  const { isOpen, openDrawer, closeDrawer, cartItems, increaseQuantity, decreaseQuantity, removeItemFromCart } = useDrawer();
   
   // Modal states
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [isBillModalOpen, setBillModalOpen] = useState(false); // State for the Bill modal
+  const [isOrderModalOpen, setOrderModalOpen] = useState(false);
+  const [isBillModalOpen, setBillModalOpen] = useState(false);
   
   // Calculate total cost
   const totalCost = cartItems.reduce((total, item) => total + item.rate * item.quantity, 0);
@@ -20,15 +20,26 @@ export default function VaulDrawer() {
   // Function to handle order placement
   const handleOrder = () => {
     console.log('Order placed:', cartItems);
-    // clearCart();
-    setModalOpen(true); // Open the Order modal
+    setOrderModalOpen(true); // Open the Order modal
     closeDrawer(); // Close the drawer after placing the order
   };
 
   // Function to handle generating the bill
   const handleGenerateBill = () => {
     setBillModalOpen(true); // Open the Bill modal
-    setModalOpen(false);
+  };
+
+  // Handle "Add More" functionality
+  const handleAddMore = () => {
+    openDrawer(); // Reopen the drawer to allow adding more items
+    setOrderModalOpen(false); // Close the order modal
+  };
+
+  // Function to handle closing bill modal
+  const handleCloseBillModal = () => {
+    setBillModalOpen(false); // Close the bill modal
+    // Optional: Clear cart only after bill generation, if needed
+    // clearCart(); 
   };
 
   return (
@@ -72,15 +83,21 @@ export default function VaulDrawer() {
             </div>
           </Drawer.Content>
         </Drawer.Portal>
-        {isModalOpen && <OrderModal onClose={() => setModalOpen(false)} onGenerateBill={handleGenerateBill} />}
+        {isOrderModalOpen && (
+          <OrderModal 
+            onClose={() => setOrderModalOpen(false)} 
+            onGenerateBill={handleGenerateBill} 
+            onAddMore={handleAddMore}  // Handle "Add More"
+          />
+        )}
       </Drawer.Root>
 
       {/* Render the BillModal when the Generate Bill button is clicked */}
       {isBillModalOpen && (
         <BillModal
-          cartItems={cartItems}
-          totalCost={totalCost}
-          onClose={() => setBillModalOpen(false)}
+          cartItems={cartItems}  // Pass the cart items to the bill
+          totalCost={totalCost}   // Pass the total cost to the bill
+          onClose={handleCloseBillModal}  // Close the bill modal
         />
       )}
     </>
