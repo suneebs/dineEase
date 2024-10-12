@@ -15,7 +15,7 @@ export default function VaulDrawer() {
   const [isBillModalOpen, setBillModalOpen] = useState(false);
   
   // Calculate total cost
-  const totalCost = cartItems.reduce((total, item) => total + item.rate * item.quantity, 0);
+  const totalCost = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
   // Function to handle order placement
   const handleOrder = () => {
@@ -57,15 +57,15 @@ export default function VaulDrawer() {
                   <p>No items in the cart.</p>
                 ) : (
                   cartItems.map(item => (
-                    <div key={item.id} className="flex justify-between border-b py-2 items-center">
-                      <span>{item.title} (x{item.quantity})</span>
+                    <div key={item.name} className="flex justify-between border-b py-2 items-center">
+                      <span>{item.name} (x{item.quantity})</span>
                       <div className="flex items-center">
-                        <Button onClick={() => decreaseQuantity(item.id)}>-</Button>
+                        <Button onClick={() => decreaseQuantity(item.name)}>-</Button>
                         <span className="mx-2">{item.quantity}</span>
-                        <Button onClick={() => increaseQuantity(item.id)}>+</Button>
-                        <Button className="ml-2 bg-red-500 hover:bg-red-700" onClick={() => removeItemFromCart(item.id)}>Remove</Button>
+                        <Button onClick={() => increaseQuantity(item.name)}>+</Button>
+                        <Button className="ml-2 bg-red-500 hover:bg-red-700" onClick={() => removeItemFromCart(item.name)}>Remove</Button>
                       </div>
-                      <span>₹ {item.rate * item.quantity}</span>
+                      <span>₹ {item.price * item.quantity}</span>
                     </div>
                   ))
                 )}
