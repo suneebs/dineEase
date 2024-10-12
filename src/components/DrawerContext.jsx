@@ -11,11 +11,11 @@ export const DrawerProvider = ({ children }) => {
   const closeDrawer = () => setIsOpen(false);
   const addItemToCart = (item) => {
     setCartItems((prevItems) => {
-      const existingItem = prevItems.find((i) => i.id === item.id);
+      const existingItem = prevItems.find((i) => i.name === item.name);
       if (existingItem) {
           // Increase quantity if the item is already in the cart
           return prevItems.map((i) =>
-              i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+              i.name === item.name ? { ...i, quantity: i.quantity + 1 } : i
           );
       }
       return [...prevItems, { ...item, quantity: 1 }]; // Initialize quantity
@@ -24,13 +24,13 @@ export const DrawerProvider = ({ children }) => {
   };
 
   const removeItemFromCart = (itemId) => {
-    setCartItems((prevItems) => prevItems.filter(item => item.id !== itemId));
+    setCartItems((prevItems) => prevItems.filter(item => item.name !== itemId));
 };
 
 const increaseQuantity = (itemId) => {
   setCartItems((prevItems) =>
       prevItems.map(item =>
-          item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item
+          item.name === itemId ? { ...item, quantity: item.quantity + 1 } : item
       )
   );
 };
@@ -38,7 +38,7 @@ const increaseQuantity = (itemId) => {
 const decreaseQuantity = (itemId) => {
   setCartItems((prevItems) =>
       prevItems.map(item =>
-          item.id === itemId && item.quantity > 1
+          item.name === itemId && item.quantity > 1
               ? { ...item, quantity: item.quantity - 1 }
               : item
       )

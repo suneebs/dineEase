@@ -12,8 +12,8 @@ const BillModal = ({ cartItems, totalCost, onClose }) => {
           ) : (
             <ul>
               {cartItems.map(item => (
-                <li key={item.id}>
-                  {item.title} (x{item.quantity}) - ₹ {item.rate * item.quantity}
+                <li key={item.name}>
+                  {item.name} (x{item.quantity}) - ₹ {item.price * item.quantity}
                 </li>
               ))}
             </ul>
