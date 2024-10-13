@@ -8,7 +8,18 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
-const arr = ["ALL","Starters","Breakfast","Lunch","Dinner","Drinks","Ice-creams"]
+const arr = [
+  "ALL",
+  "Starters",
+  "Main",
+  "Juices",
+  "Beverages",
+  "Sides",
+  "Salads",
+  "Desserts",
+  "Burgers",
+  "Sandwiches"];
+
 export function CarouselSpacing() {
   return (
     <div className="flex justify-center">
