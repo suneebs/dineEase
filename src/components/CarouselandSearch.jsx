@@ -1,6 +1,4 @@
 import { Input } from "@/components/ui/input";
-import { Button } from "./ui/button";
-import { SearchIcon } from "@/assets/icons";
 import { CarouselSpacing } from "./Carousel";
 
 const Search = ({ setSearchTerm }) => {
