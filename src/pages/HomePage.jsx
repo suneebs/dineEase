@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import UploadMenu from '@/components/uploadMenu';
+import EditMenu from './EditMenu';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -17,6 +18,9 @@ const HomePage = () => {
       {/* <div>
         <UploadMenu />
       </div> */}
+      <Button className="bg-green-500 hover:bg-green-700" onClick={() => navigate('/edit-menu')}>
+        Edit menu
+      </Button>
     </div>
 
   );
