@@ -4,18 +4,30 @@ import { db } from '../firebase';
 import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
+const categories = [
+  "Starters",
+  "Main",
+  "Juices",
+  "Beverages",
+  "Sides",
+  "Salads",
+  "Desserts",
+  "Burgers",
+  "Sandwiches"
+];
+
 const EditMenu = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [editItemId, setEditItemId] = useState(null);
   const [updatedFields, setUpdatedFields] = useState({});
-  const [newItem, setNewItem] = useState({ name: '', price: '', description: '' });
+  const [newItem, setNewItem] = useState({ name: '', price: '', description: '', category: '' });
   const [errorMessage, setErrorMessage] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
   // Fetch menu items from Firestore
   useEffect(() => {
     const fetchMenuItems = async () => {
-      const menuCollection = collection(db, 'menu'); // Adjust the collection name as needed
+      const menuCollection = collection(db, 'menu');
       const menuSnapshot = await getDocs(menuCollection);
       const menuList = menuSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setMenuItems(menuList);
@@ -43,16 +55,16 @@ const EditMenu = () => {
       name: updatedItem.name,
       price: updatedItem.price,
       description: updatedItem.description,
+      category: updatedItem.category, // Update category
     });
 
-    // Update the local state with new data
     const updatedItems = menuItems.map((item) =>
       item.id === id
-        ? { ...item, name: updatedItem.name, price: updatedItem.price, description: updatedItem.description }
+        ? { ...item, name: updatedItem.name, price: updatedItem.price, description: updatedItem.description, category: updatedItem.category }
         : item
     );
     setMenuItems(updatedItems);
-    setEditItemId(null); // Close the edit mode
+    setEditItemId(null);
   };
 
   // Delete menu item
@@ -65,31 +77,29 @@ const EditMenu = () => {
   const handleAddItem = async (e) => {
     e.preventDefault();
 
-    // Check for duplicate names
     const itemExists = menuItems.some(item => item.name.toLowerCase() === newItem.name.toLowerCase());
 
     if (itemExists) {
       setErrorMessage('An item with this name already exists.');
-      return; // Do not proceed with adding
+      return;
     }
 
-    // Clear any previous error message
     setErrorMessage('');
 
-    // Proceed to add the new item
-    if (newItem.name && newItem.price && newItem.description) {
+    if (newItem.name && newItem.price && newItem.description && newItem.category) {
       const docRef = await addDoc(collection(db, 'menu'), {
         name: newItem.name,
         price: parseFloat(newItem.price),
         description: newItem.description,
+        category: newItem.category, // Add category
       });
       setMenuItems([...menuItems, { id: docRef.id, ...newItem }]);
-      setNewItem({ name: '', price: '', description: '' }); // Reset form fields
+      setNewItem({ name: '', price: '', description: '', category: '' }); // Reset form fields
     }
   };
 
   // Filter menu items based on search term
-  const filteredItems = menuItems.filter(item => 
+  const filteredItems = menuItems.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -99,12 +109,10 @@ const EditMenu = () => {
         <h2>Edit Menu</h2>
       </div>
 
-      {/* Display the total number of items */}
       <div className='flex justify-center text-xl mb-4'>
         <p>Total Items: {menuItems.length}</p>
       </div>
 
-      {/* Search Bar */}
       <div className="mb-4">
         <input
           type="text"
@@ -115,11 +123,9 @@ const EditMenu = () => {
         />
       </div>
 
-      {/* Add New Item Form */}
       <div className="bg-slate-100 p-5">
         <h3>Add New Item</h3>
 
-        {/* Display error message if there's a duplicate */}
         {errorMessage && (
           <div className="text-red-500 mb-4">
             {errorMessage}
@@ -147,13 +153,22 @@ const EditMenu = () => {
             onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
             className="border p-2 w-full"
           />
+          <select
+            value={newItem.category}
+            onChange={(e) => setNewItem({ ...newItem, category: e.target.value })}
+            className="border p-2 w-full"
+          >
+            <option value="">Select Category</option>
+            {categories.map(category => (
+              <option key={category} value={category}>{category}</option>
+            ))}
+          </select>
           <Button type="submit" className="bg-green-400 w-full">
             Add Item
           </Button>
         </form>
       </div>
 
-      {/* Display Menu Items */}
       <div className="bg-slate-100 grid grid-cols-2 gap-8 pt-10 p-9 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {filteredItems.map((item) => (
           <Card key={item.id}>
@@ -161,7 +176,6 @@ const EditMenu = () => {
               {/* You can add an image or other content here */}
             </CardHeader>
             <CardContent>
-              {/* If this is the item being edited, show input fields */}
               {editItemId === item.id ? (
                 <>
                   <input
@@ -181,12 +195,23 @@ const EditMenu = () => {
                     onChange={(e) => handleInputChange(e, 'price', item.id)}
                     className="border p-1 w-full mt-2"
                   />
+                  <select
+                    value={updatedFields[item.id]?.category || item.category}
+                    onChange={(e) => handleInputChange(e, 'category', item.id)}
+                    className="border p-1 w-full mt-2"
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map(category => (
+                      <option key={category} value={category}>{category}</option>
+                    ))}
+                  </select>
                 </>
               ) : (
                 <>
                   <CardTitle>{item.name}</CardTitle>
                   <CardDescription>{item.description}</CardDescription>
                   <CardDescription>₹{item.price}</CardDescription>
+                  <CardDescription>Category: {item.category}</CardDescription> {/* Display category */}
                 </>
               )}
             </CardContent>
@@ -210,6 +235,7 @@ const EditMenu = () => {
                         name: item.name,
                         price: item.price,
                         description: item.description,
+                        category: item.category, // Set category for editing
                       },
                     }));
                   }}>
