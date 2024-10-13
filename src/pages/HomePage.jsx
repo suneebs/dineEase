@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import UploadMenu from '@/components/uploadMenu';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -13,7 +14,11 @@ const HomePage = () => {
       <Button className="bg-green-500 hover:bg-green-700" onClick={() => navigate('/book-seat')}>
         Book Seat
       </Button>
+      {/* <div>
+        <UploadMenu />
+      </div> */}
     </div>
+
   );
 };
 
