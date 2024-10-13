@@ -1,7 +1,6 @@
-import Search from "@/components/CarouselandSearch";
 import VaulDrawer from "@/components/Drawer";
 import Footer from "@/components/Footer";
-import MenuItems from "@/components/MenuItems";
+import MenuContainer from "@/components/MenuContainer";
 import Nav from "@/components/Nav";
 import { DrawerProvider } from '@/components/DrawerContext';
 import menu from "@/assets/menu.png";
@@ -17,12 +16,12 @@ const MenuPage = () => {
           <img src={menu} height={200} width={200} alt="menu" />
         </section>
         
-        <section className="padding">
+        {/* <section className="padding">
           <Search />
-        </section>
+        </section> */}
         
         <section className="padding mt-20">
-          <MenuItems />
+          <MenuContainer />
         </section>
         
         <section className="bg-black flex justify-center">
