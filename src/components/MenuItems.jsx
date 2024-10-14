@@ -38,12 +38,15 @@ const MenuItems = ({ searchTerm }) => {
             {filteredFood.map(f => (
                 <Card key={f.id}>
                     <CardHeader>
-                        <img src={logo} alt="logo" />
+                        <img src={f.imageUrl} alt={f.name} className="w-full h-32 object-cover" />
                     </CardHeader>
                     <CardContent>
                         <CardTitle>
                             {f.name}
                         </CardTitle>
+                        <CardDescription>
+                            {f.description}
+                        </CardDescription>
                         <CardDescription>
                             <b>₹ {f.price}</b>
                         </CardDescription>

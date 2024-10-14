@@ -20,7 +20,7 @@ const MenuPage = () => {
           <Search />
         </section> */}
         
-        <section className="padding mt-20">
+        <section className="padding">
           <MenuContainer />
         </section>
         
