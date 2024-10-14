@@ -5,7 +5,7 @@ import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
 import { Button } from "./ui/button";
 import { useDrawer } from "./DrawerContext";
 
-const MenuItems = ({ searchTerm, selectedCategory }) => {
+const MenuItems = ({ searchTerm, selectedCategory, selectedFoodType }) => {
   const { addItemToCart, removeItemFromCart, cartItems } = useDrawer();
   const [food, setFood] = useState([]);
 
@@ -27,11 +27,18 @@ const MenuItems = ({ searchTerm, selectedCategory }) => {
     }
   };
 
-  // Filter food items based on search term and selected category
+  // Filter food items based on search term, selected category, and selected food type
   const filteredFood = food.filter((item) => {
     const matchesSearchTerm = item.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === "ALL" || item.category === selectedCategory;
-    return matchesSearchTerm && matchesCategory;
+    
+    // Adjusted logic for Veg/Non-Veg based on the `isVeg` boolean
+    const matchesFoodType =
+      selectedFoodType === "ALL" ||
+      (selectedFoodType === "Veg" && item.isVeg === true) ||
+      (selectedFoodType === "Non-Veg" && item.isVeg === false);
+
+    return matchesSearchTerm && matchesCategory && matchesFoodType;
   });
 
   return (
