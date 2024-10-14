@@ -20,9 +20,9 @@ const Search = ({ setSearchTerm }) => {
                 </div> */}
             </section>
             <section className=" mt-20 absolute w-full">
-                <div className="">
+                {/* <div className="">
                     <CarouselSpacing />
-                </div>
+                </div> */}
             </section>
         </div>
     );
