@@ -4,6 +4,8 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../firebase';
 import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import imageCompression from 'browser-image-compression';
+
 
 const categories = [
   "Starters",
@@ -51,20 +53,34 @@ const EditMenu = () => {
   // Handle image upload
   const handleImageUpload = async (file) => {
     if (!file) return null; // Return null if no file is provided
-    const imageRef = ref(storage, `menuImages/${file.name}`);
   
     try {
-      // Upload the file
-      await uploadBytes(imageRef, file);
+      // Compress the image using browser-image-compression
+      const compressedFile = await imageCompression(file, {
+        maxSizeMB: 20/1024, // Maximum file size in MB
+        maxWidthOrHeight: 1024, // Maximum width or height of the image
+        useWebWorker: true, // Use web worker for faster compression
+      });
+  
+      console.log('Compressed file:', compressedFile);
+  
+      // Create a storage reference in Firebase
+      const imageRef = ref(storage, `menuImages/${compressedFile.name}`);
+  
+      // Upload the compressed image
+      await uploadBytes(imageRef, compressedFile);
+  
       // Get the download URL
       const downloadURL = await getDownloadURL(imageRef);
-      console.log("Download url is: ",downloadURL)
+      console.log("Download url is: ", downloadURL);
       return downloadURL; // Return the download URL of the uploaded image
+  
     } catch (error) {
       console.error("Error uploading image:", error);
       return null; // Return null if there's an error
     }
   };
+  
   
 
   // Save changes to Firestore
