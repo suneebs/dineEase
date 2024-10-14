@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { doc, updateDoc, collection, getDocs, deleteDoc, addDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db, storage } from '../firebase';
 import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
@@ -20,7 +21,7 @@ const EditMenu = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [editItemId, setEditItemId] = useState(null);
   const [updatedFields, setUpdatedFields] = useState({});
-  const [newItem, setNewItem] = useState({ name: '', price: '', description: '', category: '' });
+  const [newItem, setNewItem] = useState({ name: '', price: '', description: '', category: '', image: null });
   const [errorMessage, setErrorMessage] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -47,25 +48,73 @@ const EditMenu = () => {
     }));
   };
 
+  // Handle image upload
+  const handleImageUpload = async (file) => {
+    if (!file) return null; // Return null if no file is provided
+    const imageRef = ref(storage, `menuImages/${file.name}`);
+  
+    try {
+      // Upload the file
+      await uploadBytes(imageRef, file);
+      // Get the download URL
+      const downloadURL = await getDownloadURL(imageRef);
+      console.log("Download url is: ",downloadURL)
+      return downloadURL; // Return the download URL of the uploaded image
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      return null; // Return null if there's an error
+    }
+  };
+  
+
   // Save changes to Firestore
   const handleSaveChanges = async (id) => {
     const updatedItem = updatedFields[id];
     const docRef = doc(db, 'menu', id);
-    await updateDoc(docRef, {
-      name: updatedItem.name,
-      price: updatedItem.price,
-      description: updatedItem.description,
-      category: updatedItem.category, // Update category
-    });
-
-    const updatedItems = menuItems.map((item) =>
-      item.id === id
-        ? { ...item, name: updatedItem.name, price: updatedItem.price, description: updatedItem.description, category: updatedItem.category }
-        : item
-    );
-    setMenuItems(updatedItems);
-    setEditItemId(null);
+  
+    try {
+      // Step 1: Handle image upload if the user has provided a new image
+      let finalImageUrl = updatedItem.imageUrl; // Default to current image URL
+  
+      if (updatedItem.image) {
+        console.log("Uploading new image...");
+        finalImageUrl = await handleImageUpload(updatedItem.image);
+        console.log("Image uploaded successfully. Final Image URL:", finalImageUrl);
+  
+        // Step 2: After image upload, update the image URL in the updatedFields state
+        setUpdatedFields((prev) => ({
+          ...prev,
+          [id]: {
+            ...prev[id],
+            imageUrl: finalImageUrl,  // Set the final image URL after upload
+          },
+        }));
+      }
+  
+      // Step 3: Update Firestore with new data, including the image URL
+      await updateDoc(docRef, {
+        name: updatedItem.name,
+        price: parseFloat(updatedItem.price),
+        description: updatedItem.description,
+        category: updatedItem.category,
+        imageUrl: finalImageUrl || updatedItem.imageUrl, // Use the new or existing image URL
+      });
+  
+      // Step 4: Update the local state with new data (synchronously)
+      const updatedItems = menuItems.map((item) =>
+        item.id === id
+          ? { ...item, ...updatedItem, imageUrl: finalImageUrl || updatedItem.imageUrl } // Ensure the new image URL is used
+          : item
+      );
+      setMenuItems(updatedItems);  // Update local state with the changes
+      setEditItemId(null);  // Close the edit mode
+      console.log("Menu updated successfully.");
+  
+    } catch (error) {
+      console.error("Error saving changes:", error);
+    }
   };
+  
 
   // Delete menu item
   const handleDeleteItem = async (id) => {
@@ -86,15 +135,22 @@ const EditMenu = () => {
 
     setErrorMessage('');
 
+    let imageUrl = '';
+    if (newItem.image) {
+      imageUrl = await handleImageUpload(newItem.image);
+      console.log("Uploaded Image URL:", imageUrl);
+    }
+
     if (newItem.name && newItem.price && newItem.description && newItem.category) {
       const docRef = await addDoc(collection(db, 'menu'), {
         name: newItem.name,
         price: parseFloat(newItem.price),
         description: newItem.description,
-        category: newItem.category, // Add category
+        category: newItem.category,
+        imageUrl: imageUrl || '', // Store the image URL
       });
-      setMenuItems([...menuItems, { id: docRef.id, ...newItem }]);
-      setNewItem({ name: '', price: '', description: '', category: '' }); // Reset form fields
+      setMenuItems([...menuItems, { id: docRef.id, ...newItem, imageUrl }]);
+      setNewItem({ name: '', price: '', description: '', category: '', image: null }); // Reset form fields
     }
   };
 
@@ -163,6 +219,13 @@ const EditMenu = () => {
               <option key={category} value={category}>{category}</option>
             ))}
           </select>
+          {/* Image Upload */}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setNewItem({ ...newItem, image: e.target.files[0] })}
+            className="border p-2 w-full"
+          />
           <Button type="submit" className="bg-green-400 w-full">
             Add Item
           </Button>
@@ -173,7 +236,9 @@ const EditMenu = () => {
         {filteredItems.map((item) => (
           <Card key={item.id}>
             <CardHeader>
-              {/* You can add an image or other content here */}
+              {item.imageUrl && (
+                <img src={item.imageUrl} alt={item.name} className="w-full h-32 object-cover" />
+              )}
             </CardHeader>
             <CardContent>
               {editItemId === item.id ? (
@@ -205,13 +270,29 @@ const EditMenu = () => {
                       <option key={category} value={category}>{category}</option>
                     ))}
                   </select>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      // const imageUrl = await handleImageUpload(e.target.files[0]);
+                      setUpdatedFields((prev) => ({
+                        ...prev,
+                        [item.id]: {
+                          ...prev[item.id],
+                          image: e.target.files[0], // Save the new image file
+                          // imageUrl // Save the new image URL
+                        },
+                      }));
+                    }}
+                    className="border p-1 w-full mt-2"
+                  />
                 </>
               ) : (
                 <>
                   <CardTitle>{item.name}</CardTitle>
                   <CardDescription>{item.description}</CardDescription>
                   <CardDescription>₹{item.price}</CardDescription>
-                  <CardDescription>Category: {item.category}</CardDescription> {/* Display category */}
+                  <CardDescription>Category: {item.category}</CardDescription>
                 </>
               )}
             </CardContent>
@@ -235,7 +316,8 @@ const EditMenu = () => {
                         name: item.name,
                         price: item.price,
                         description: item.description,
-                        category: item.category, // Set category for editing
+                        category: item.category,
+                        imageUrl: item.imageUrl, // Set image URL for editing
                       },
                     }));
                   }}>
