@@ -2,6 +2,15 @@ import React from 'react';
 import { Button } from './ui/button';
 
 const BillModal = ({ cartItems, totalCost, onClose }) => {
+
+  const handleClose = () => {
+    // Call the onClose function passed as a prop
+    onClose();
+    
+    // Refresh the page after closing the modal
+    window.location.reload();
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50">
       <div className="bg-white p-6 rounded shadow-lg text-center">
@@ -20,7 +29,7 @@ const BillModal = ({ cartItems, totalCost, onClose }) => {
           )}
         </div>
         <p className="mt-4 font-bold">Total Cost: ₹ {totalCost}</p>
-        <Button className="bg-blue-500 hover:bg-blue-700 mt-4" onClick={onClose}>
+        <Button className="bg-blue-500 hover:bg-blue-700 mt-4" onClick={handleClose}>
           Close
         </Button>
       </div>
