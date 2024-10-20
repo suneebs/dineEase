@@ -1,13 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button'; // Assuming you have this Button component
 import { useNavigate } from 'react-router-dom';  // Assuming you're using react-router-dom for navigation
+import { doc, getDoc, setDoc, getDocs, collection } from 'firebase/firestore';  // Firestore imports
+import { db } from '@/firebase'; // Import your firebase config
 
 const SeatBookingPage = () => {
   const [selectedSeat, setSelectedSeat] = useState(null);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [bookedSeats, setBookedSeats] = useState([]);  // Track which seats are booked
   const navigate = useNavigate();
+
+  // Fetch booked seat information when the component loads
+  useEffect(() => {
+    const fetchBookedSeats = async () => {
+      const seatsSnapshot = await getDocs(collection(db, 'Table Order'));
+      const booked = seatsSnapshot.docs
+        .filter(doc => doc.data().customerName && doc.data().phoneNumber)  // Check if seat is booked
+        .map(doc => parseInt(doc.id));  // Convert doc id (seat number) to an integer
+      setBookedSeats(booked);
+    };
+
+    fetchBookedSeats();
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,9 +39,39 @@ const SeatBookingPage = () => {
     setSelectedSeat(seatNumber);
   };
 
-  const handleBookSeatClick = () => {
-    // Perform any additional booking logic, then redirect to the menu page
-    navigate('/menu', { state: { canOrder: false } });  // Pass a state to disable the order button
+  const handleBookSeatClick = async () => {
+    if (selectedSeat && name && phone) {
+      try {
+        // Get the document for the selected seat
+        const tableDoc = doc(db, 'Table Order', `${selectedSeat}`);
+        const tableSnapshot = await getDoc(tableDoc);
+
+        if (tableSnapshot.exists()) {
+          const tableData = tableSnapshot.data();
+
+          // Check if the fields are null (i.e., table is available)
+          if (!tableData.customerName && !tableData.phoneNumber) {
+            // Proceed with booking since the table is available
+            await setDoc(tableDoc, {
+              customerName: name,
+              phoneNumber: phone,
+            });
+            alert(`Seat ${selectedSeat} booked and details saved to Firebase!`);
+
+            // Redirect to the menu page with state
+            navigate('/menu', { state: { canOrder: false } });  // Disable order button on menu page
+          } else {
+            // Table is already booked
+            alert(`Seat ${selectedSeat} is already booked. Please choose another seat.`);
+          }
+        }
+      } catch (error) {
+        console.error('Error booking seat:', error);
+        alert('Failed to book seat. Please try again.');
+      }
+    } else {
+      alert('Please select a seat.');
+    }
   };
 
   return (
@@ -73,8 +119,9 @@ const SeatBookingPage = () => {
             {[1, 2, 3, 4, 5, 6, 7, 8].map((seat) => (
               <Button 
                 key={seat} 
-                className={`p-4 ${selectedSeat === seat ? 'bg-green-500' : 'bg-gray-300'} hover:bg-gray-400`}
-                onClick={() => bookSeat(seat)}
+                className={`p-4 ${bookedSeats.includes(seat) ? 'bg-red-500' : (selectedSeat === seat ? 'bg-green-500' : 'bg-gray-300')} hover:bg-gray-400`}
+                onClick={() => !bookedSeats.includes(seat) && bookSeat(seat)}  // Disable booking for already booked seats
+                disabled={bookedSeats.includes(seat)}  // Disable the button if the seat is already booked
               >
                 Seat {seat}
               </Button>

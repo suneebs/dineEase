@@ -44,24 +44,24 @@ const MenuItems = ({ searchTerm, selectedCategory, selectedFoodType }) => {
   return (
     <div className="bg-slate-100 grid grid-cols-2 gap-8 pt-10 p-9 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
       {filteredFood.map((f) => (
-        <Card key={f.id}>
-          <CardHeader>
-            <img src={f.imageUrl} alt={f.name} className="w-full h-32 object-cover" />
-          </CardHeader>
-          <CardContent>
-            <CardTitle>{f.name}</CardTitle>
-            <CardDescription>{f.description}</CardDescription>
-            <CardDescription>
-              <b>₹ {f.price}</b>
-            </CardDescription>
-          </CardContent>
-          <CardFooter className="flex justify-end">
-            <Button
-              onClick={() => handleToggleCartItem(f)}
-              className="bg-green-400"
-            >
-              {cartItems.some((item) => item.name === f.name) ? "ADDED" : "ADD"}
-            </Button>
+          <Card key={f.id}>
+            <CardHeader>
+              <img src={f.imageUrl} alt={f.name} className="w-full h-32 object-cover" />
+            </CardHeader>
+            <CardContent>
+              <CardTitle>{f.name}</CardTitle>
+              <CardDescription>{f.description}</CardDescription>
+              <CardDescription>
+                <b>₹ {f.price}</b>
+              </CardDescription>
+            </CardContent>
+            <CardFooter className="flex justify-end">
+              <Button
+                onClick={() => handleToggleCartItem(f)}
+                className="bg-green-400"
+              >
+                {cartItems.some((item) => item.name === f.name) ? "ADDED" : "ADD"}
+              </Button>
           </CardFooter>
         </Card>
       ))}
