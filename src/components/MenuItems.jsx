@@ -5,8 +5,8 @@ import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
 import { Button } from "./ui/button";
 import { useDrawer } from "./DrawerContext";
 
-const MenuItems = ({ searchTerm, selectedCategory, selectedFoodType }) => {
-  const { addItemToCart, removeItemFromCart, cartItems } = useDrawer();
+const MenuItems = ({ searchTerm, selectedCategory, selectedFoodType,selectedSeat }) => {
+  const { addItemToCart, removeItemFromCart, cartItems,setSelectedSeat } = useDrawer();
   const [food, setFood] = useState([]);
 
   useEffect(() => {
@@ -14,6 +14,8 @@ const MenuItems = ({ searchTerm, selectedCategory, selectedFoodType }) => {
       const querySnapshot = await getDocs(collection(db, "menu"));
       const menuData = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setFood(menuData);
+      console.log("=--------------Seat:    ",selectedSeat);
+      setSelectedSeat(selectedSeat);
     };
     fetchMenuItems();
   }, []);
