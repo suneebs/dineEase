@@ -8,11 +8,12 @@ import OrderModal from './OrderModal';
 import BillModal from './BillModal';
 
 export default function VaulDrawer() {
-  const { isOpen, openDrawer, closeDrawer, cartItems, increaseQuantity, decreaseQuantity, removeItemFromCart } = useDrawer();
+  const { isOpen, openDrawer, closeDrawer, cartItems, increaseQuantity, decreaseQuantity, removeItemFromCart,selectedSeat } = useDrawer();
   
   // Modal states
   const [isOrderModalOpen, setOrderModalOpen] = useState(false);
   const [isBillModalOpen, setBillModalOpen] = useState(false);
+  console.log("IN DRAWER: ",selectedSeat);
   
   // Calculate total cost
   const totalCost = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -98,6 +99,7 @@ export default function VaulDrawer() {
           cartItems={cartItems}  // Pass the cart items to the bill
           totalCost={totalCost}   // Pass the total cost to the bill
           onClose={handleCloseBillModal}  // Close the bill modal
+          selectedSeat={selectedSeat}
         />
       )}
     </>

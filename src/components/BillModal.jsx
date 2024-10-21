@@ -1,11 +1,46 @@
 import React from 'react';
 import { Button } from './ui/button';
+import { doc, getDoc, setDoc, getDocs, collection } from 'firebase/firestore';  // Firestore imports
+import { db } from '@/firebase'; // Import your firebase config
 
-const BillModal = ({ cartItems, totalCost, onClose }) => {
+const handleDeleteTable = async (selectedSeat) => {
+  
+    try {
+      // Get the document for the selected seat
+      const tableDoc = doc(db, 'Table Order', `${selectedSeat}`);
+      const tableSnapshot = await getDoc(tableDoc);
 
-  const handleClose = () => {
+      if (tableSnapshot.exists()) {
+        const tableData = tableSnapshot.data();
+
+        // Check if the fields are null (i.e., table is available)
+        if (tableData.customerName && tableData.phoneNumber) {
+          // Proceed with booking since the table is available
+          await setDoc(tableDoc, {
+            customerName: "",
+            phoneNumber: "",
+          });
+          // alert(`Table ${selectedSeat} is deleted from db`);
+
+        } else {
+          // Table is already booked
+          alert(`Table ${selectedSeat} is not deleted!`);
+        }
+      }
+    } catch (error) {
+      console.error('Error deleting table:', error);
+      alert('Failed to delete table. Please try again.');
+    }
+};
+
+const BillModal = ({ cartItems, totalCost, onClose,selectedSeat }) => {
+
+  const handleClose = async() => {
+
+    await handleDeleteTable(selectedSeat);
     // Call the onClose function passed as a prop
     onClose();
+    console.log("BILL MODAL:", selectedSeat);
     
     // Refresh the page after closing the modal
     window.location.reload();

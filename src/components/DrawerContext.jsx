@@ -6,9 +6,11 @@ const DrawerContext = createContext();
 export const DrawerProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const [selectedSeat, setSelectedSeat] = useState(null);
   
   const openDrawer = () => setIsOpen(true);
   const closeDrawer = () => setIsOpen(false);
+  console.log("selectedSeat:", selectedSeat );
   const addItemToCart = (item) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((i) => i.name === item.name);
@@ -51,7 +53,7 @@ const clearCart = () => {
   const itemCount = cartItems.length; // Count of items in the cart
 
   return (
-    <DrawerContext.Provider value={{ isOpen, openDrawer, closeDrawer, cartItems, addItemToCart, itemCount,removeItemFromCart, increaseQuantity, decreaseQuantity,clearCart }}>
+    <DrawerContext.Provider value={{ isOpen, openDrawer, closeDrawer, cartItems, addItemToCart, itemCount,removeItemFromCart, increaseQuantity, decreaseQuantity,clearCart,selectedSeat,setSelectedSeat }}>
       {children}
     </DrawerContext.Provider>
   );
