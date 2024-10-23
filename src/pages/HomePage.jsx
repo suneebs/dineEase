@@ -13,17 +13,16 @@ const HomePage = () => {
       <Button className="bg-blue-500 hover:bg-blue-700 mb-4" onClick={() => navigate('/menu')}>
         Access Menu
       </Button>
-      <Button className="bg-green-500 hover:bg-green-700" onClick={() => navigate('/book-seat')}>
+      <Button className="bg-green-500 hover:bg-green-700 mb-4" onClick={() => navigate('/book-seat')}>
         Book Seat
       </Button>
-      {/* <div>
-        <UpdateDocumentsButton />
-      </div> */}
-      <Button className="bg-green-500 hover:bg-green-700" onClick={() => navigate('/edit-menu')}>
-        Edit menu
+      <Button className="bg-green-500 hover:bg-green-700 mb-4" onClick={() => navigate('/edit-menu')}>
+        Edit Menu
+      </Button>
+      <Button className="bg-yellow-500 hover:bg-yellow-700" onClick={() => navigate('/bills')}>
+        View Bills
       </Button>
     </div>
-
   );
 };
 
