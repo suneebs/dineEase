@@ -3,6 +3,7 @@ import HomePage from './pages/HomePage';  // Home page with buttons
 import MenuPage from './pages/MenuPage';  // Menu page for accessing the cart and items
 import SeatBookingPage from './pages/SeatBookingPage';  // Page for seat booking
 import EditMenu from './pages/EditMenu';
+import BillsPage from './pages/BillsPage';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/book-seat" element={<SeatBookingPage />} />
         <Route path='/edit-menu' element={<EditMenu />}/>
+        <Route path="/bills" element={<BillsPage />} />
       </Routes>
     </Router>
   );
