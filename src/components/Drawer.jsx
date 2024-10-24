@@ -5,54 +5,73 @@ import { Button } from './ui/button';
 import OrderModal from './OrderModal';
 import BillModal from './BillModal';
 import { db } from '@/firebase'; // Import your Firebase config
-import { collection, addDoc, updateDoc, doc, onSnapshot } from 'firebase/firestore'; // Import Firestore methods
+import { collection, addDoc, updateDoc, doc, onSnapshot, getDoc } from 'firebase/firestore'; // Import Firestore methods
 
 export default function VaulDrawer() {
-  const { isOpen, openDrawer, closeDrawer, cartItems, increaseQuantity, decreaseQuantity, removeItemFromCart, selectedSeat} = useDrawer();
+  const { isOpen, openDrawer, closeDrawer, cartItems, increaseQuantity, decreaseQuantity, removeItemFromCart, removeAllItemsFromCart, selectedSeat } = useDrawer();
 
   // Modal states
   const [isOrderModalOpen, setOrderModalOpen] = useState(false);
   const [isBillModalOpen, setBillModalOpen] = useState(false);
   
   // Order details state
-  const [orderDetails, setOrderDetails] = useState([]);
+  const [orderDetails, setOrderDetails] = useState([]); // Entire order history
   const [timerActive, setTimerActive] = useState(false); // Track if the timer is active
   const [orderId, setOrderId] = useState(null); // Track order document ID
 
   // Calculate total cost
-  const totalCost = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  const totalCost = orderDetails.reduce((total, item) => total + item.price * item.quantity, 0);
 
   // Function to handle order placement
   const handleOrder = async () => {
     setOrderDetails(cartItems); // Store cart items as order details
-    
+
     try {
       if (!orderId) {
-        // Create a new order document
+        // Create a new order document if there's no orderId
         const docRef = await addDoc(collection(db, 'Bills'), {
           items: cartItems,
           totalCost: totalCost,
           selectedSeat: selectedSeat,
           timestamp: new Date()
         });
-        
+
         // Set the orderId in the document
-        await updateDoc(docRef, { orderId: docRef.id }); // Update the document with orderId
+        await updateDoc(docRef, { orderId: docRef.id });
         setOrderId(docRef.id); // Save the document ID for future updates
       } else {
-        // Update existing order
-        await updateDoc(doc(db, 'Bills', orderId), {
-          items: cartItems,
-          totalCost: totalCost,
-          timestamp: new Date()
-        });
+        // Fetch the existing order
+        const existingOrderDoc = await getDoc(doc(db, 'Bills', orderId));
+        if (existingOrderDoc.exists()) {
+          const existingItems = existingOrderDoc.data().items || [];
+
+          // Merge the new items with the existing ones
+          const updatedItems = [...existingItems];
+
+          cartItems.forEach((newItem) => {
+            const existingItemIndex = updatedItems.findIndex(item => item.name === newItem.name);
+            if (existingItemIndex !== -1) {
+              // If the item already exists, increase its quantity
+              updatedItems[existingItemIndex].quantity += newItem.quantity;
+            } else {
+              // If the item does not exist, add it as a new item
+              updatedItems.push(newItem);
+            }
+          });
+
+          // Update the document with merged items
+          await updateDoc(doc(db, 'Bills', orderId), {
+            items: updatedItems,
+            totalCost: updatedItems.reduce((total, item) => total + item.price * item.quantity, 0), // Recalculate the total cost
+            timestamp: new Date()
+          });
+          setOrderDetails(updatedItems); // Update the order details
+        }
       }
 
-      // Activate the timer only if the order has been placed or updated successfully
-      setTimerActive(true); 
       setOrderModalOpen(true); // Open the Order modal
       closeDrawer(); // Close the drawer after placing the order
-
+      setTimerActive(true); // Activate the timer
     } catch (error) {
       console.error("Error placing order: ", error);
       setTimerActive(false); // Ensure timer is not active if there's an error
@@ -60,13 +79,32 @@ export default function VaulDrawer() {
   };
 
   // Function to handle generating the bill
-  const handleGenerateBill = () => {
-    setBillModalOpen(true); // Open the Bill modal
+  const handleGenerateBill = async () => {
+    if (!orderId) return; // No orderId, no bill to generate
+
+    try {
+      // Fetch the existing order from Firestore
+      const existingOrderDoc = await getDoc(doc(db, 'Bills', orderId));
+
+      if (existingOrderDoc.exists()) {
+        const data = existingOrderDoc.data();
+        const existingItems = data.items || [];
+
+        // Calculate the total cost again, just in case
+        const totalCost = existingItems.reduce((total, item) => total + item.price * item.quantity, 0);
+
+        // Open the Bill modal and pass the entire order history
+        setBillModalOpen(true); 
+        setOrderDetails(existingItems); // Set the order details to the fetched items
+      }
+    } catch (error) {
+      console.error("Error generating bill: ", error);
+    }
   };
 
   // Handle "Add More" functionality
   const handleAddMore = async () => {
-    // Update the existing order with new items
+    removeAllItemsFromCart();
     try {
       await updateDoc(doc(db, 'Bills', orderId), {
         items: cartItems,
@@ -92,16 +130,14 @@ export default function VaulDrawer() {
       const unsubscribe = onSnapshot(doc(db, 'Bills', orderId), (doc) => {
         if (doc.exists()) {
           const data = doc.data();
-          // Check if the items or total cost have changed
-          if (data.items !== cartItems || data.totalCost !== totalCost) {
-            setTimerActive(true); // Activate timer on successful update
-          }
+          const fetchedItems = data.items || [];
+          setOrderDetails(fetchedItems); // Update the order details with the fetched items
         }
       });
 
       return () => unsubscribe(); // Cleanup listener on unmount
     }
-  }, [orderId, cartItems, totalCost]);
+  }, [orderId]);
 
   return (
     <>
@@ -159,8 +195,8 @@ export default function VaulDrawer() {
       {/* Render the BillModal when the Generate Bill button is clicked */}
       {isBillModalOpen && (
         <BillModal
-          cartItems={cartItems}  // Pass the cart items to the bill
-          totalCost={totalCost}   // Pass the total cost to the bill
+          cartItems={orderDetails}  // Pass the entire order history
+          totalCost={totalCost}   // Pass the recalculated total cost
           onClose={handleCloseBillModal}  // Close the bill modal
           selectedSeat={selectedSeat}
         />
