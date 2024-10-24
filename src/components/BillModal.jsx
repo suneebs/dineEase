@@ -24,7 +24,7 @@ const handleDeleteTable = async (selectedSeat) => {
 
         } else {
           // Table is already booked
-          alert(`Table ${selectedSeat} is not deleted!`);
+          // alert(`Table ${selectedSeat} is not deleted!`);
         }
       }
     } catch (error) {
