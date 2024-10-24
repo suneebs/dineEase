@@ -250,7 +250,7 @@ const EditMenu = () => {
 
       <div className="bg-slate-100 grid grid-cols-2 gap-8 pt-10 p-9 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {filteredItems.map((item) => (
-          <Card key={item.id}>
+          <Card key={item.id} className="flex flex-col justify-between h-full">
             <CardHeader>
               {item.imageUrl && (
                 <img src={item.imageUrl} alt={item.name} className="w-full h-32 object-cover" />
@@ -312,7 +312,7 @@ const EditMenu = () => {
                 </>
               )}
             </CardContent>
-            <CardFooter className='flex justify-between'>
+            <CardFooter className="flex justify-between mt-auto">
               {editItemId === item.id ? (
                 <>
                   <Button onClick={() => handleSaveChanges(item.id)} className='bg-green-400'>

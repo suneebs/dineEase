@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '@/firebase'; // Import your Firebase config
-import { collection, onSnapshot, doc, getDoc } from 'firebase/firestore';
+import { collection, onSnapshot, doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 
 const BillsPage = () => {
   const [bills, setBills] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState(0);
-  const [dailyRevenue, setDailyRevenue] = useState(0); // State for daily revenue
+  const [dailyRevenue, setDailyRevenue] = useState(0);
   const [selectedDate, setSelectedDate] = useState('');
   const [filteredBills, setFilteredBills] = useState([]);
   const [orderId, setOrderId] = useState('');
@@ -24,48 +24,53 @@ const BillsPage = () => {
     return () => unsubscribe();
   }, []);
 
-  // Calculate total revenue
   const calculateTotalRevenue = (bills) => {
     const total = bills.reduce((sum, bill) => sum + bill.totalCost, 0);
     setTotalRevenue(total);
   };
 
-  // Effect to filter bills when selectedDate changes
   useEffect(() => {
-    console.log('Selected Date:', selectedDate);
-    console.log('All Bills:', bills);
-
     if (selectedDate) {
       const filtered = bills.filter(bill => {
-        const billDate = bill.timestamp.toDate().toLocaleDateString('en-CA'); // Use 'en-CA' for yyyy-mm-dd format
-        console.log('Bill Date:', billDate); // Log each bill's date for debugging
+        const billDate = bill.timestamp.toDate().toLocaleDateString('en-CA');
         return billDate === selectedDate;
       });
-      console.log('Filtered Bills:', filtered); // Log filtered bills for debugging
       setFilteredBills(filtered);
-      calculateDailyRevenue(filtered); // Calculate daily revenue for filtered bills
+      calculateDailyRevenue(filtered);
     } else {
-      setFilteredBills([]); // Clear filtered bills if no date is selected
-      setDailyRevenue(0); // Reset daily revenue if no date is selected
+      setFilteredBills([]);
+      setDailyRevenue(0);
     }
-  }, [selectedDate, bills]); // Run this effect whenever selectedDate or bills change
+  }, [selectedDate, bills]);
 
-  // Calculate daily revenue based on filtered bills
   const calculateDailyRevenue = (filtered) => {
     const dailyTotal = filtered.reduce((sum, bill) => sum + bill.totalCost, 0);
     setDailyRevenue(dailyTotal);
   };
 
-  // Fetch order details by order ID
   const handleFetchOrderDetails = async () => {
-    if (!orderId) return; // Exit if order ID is empty
+    if (!orderId) return;
     const orderDoc = doc(db, 'Bills', orderId);
     const orderSnapshot = await getDoc(orderDoc);
     
     if (orderSnapshot.exists()) {
       setOrderDetails({ id: orderSnapshot.id, ...orderSnapshot.data() });
     } else {
-      setOrderDetails(null); // Reset order details if not found
+      setOrderDetails(null);
+    }
+  };
+
+  // New delete function
+  const handleDeleteOrder = async (orderId) => {
+    if (!orderId) return;
+    const orderDoc = doc(db, 'Bills', orderId);
+    
+    try {
+      await deleteDoc(orderDoc);
+      // alert(`Order with ID ${orderId} deleted successfully!`);
+    } catch (error) {
+      console.error("Error deleting order:", error);
+      alert("Failed to delete order. Please try again.");
     }
   };
 
@@ -80,7 +85,6 @@ const BillsPage = () => {
           onChange={(e) => setSelectedDate(e.target.value)} 
           className="border p-2 rounded"
         />
-        {/* No need for filter button since filtering is automatic */}
       </div>
 
       <h2 className="font-semibold">Total Revenue: ₹ {totalRevenue}</h2>
@@ -120,6 +124,7 @@ const BillsPage = () => {
             <th className="border p-2">Order ID</th>
             <th className="border p-2">Total Cost</th>
             <th className="border p-2">Date</th>
+            <th className="border p-2">Actions</th> {/* New column for actions */}
           </tr>
         </thead>
         <tbody>
@@ -128,6 +133,9 @@ const BillsPage = () => {
               <td className="border p-2">{bill.id}</td>
               <td className="border p-2">₹ {bill.totalCost}</td>
               <td className="border p-2">{bill.timestamp.toDate().toLocaleDateString()}</td>
+              <td className="border p-2">
+                <Button onClick={() => handleDeleteOrder(bill.id)} className="bg-red-500 text-white">Delete</Button>
+              </td>
             </tr>
           ))}
         </tbody>
