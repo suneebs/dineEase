@@ -46,7 +46,7 @@ const MenuItems = ({ searchTerm, selectedCategory, selectedFoodType,selectedSeat
   return (
     <div className="bg-slate-100 grid grid-cols-2 gap-8 pt-10 p-9 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
       {filteredFood.map((f) => (
-          <Card key={f.id}>
+          <Card key={f.id} className="flex flex-col justify-between h-full">
             <CardHeader>
               <img src={f.imageUrl} alt={f.name} className="w-full h-32 object-cover" />
             </CardHeader>
@@ -57,7 +57,7 @@ const MenuItems = ({ searchTerm, selectedCategory, selectedFoodType,selectedSeat
                 <b>₹ {f.price}</b>
               </CardDescription>
             </CardContent>
-            <CardFooter className="flex justify-end">
+            <CardFooter className="flex justify-end mt-auto">
               <Button
                 onClick={() => handleToggleCartItem(f)}
                 className="bg-green-400"
