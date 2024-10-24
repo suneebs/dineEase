@@ -52,8 +52,12 @@ const clearCart = () => {
 };
   const itemCount = cartItems.length; // Count of items in the cart
 
+  const removeAllItemsFromCart = () => {
+    setCartItems([]); // Clear all items from the cart
+  };
+
   return (
-    <DrawerContext.Provider value={{ isOpen, openDrawer, closeDrawer, cartItems, addItemToCart, itemCount,removeItemFromCart, increaseQuantity, decreaseQuantity,clearCart,selectedSeat,setSelectedSeat }}>
+    <DrawerContext.Provider value={{ isOpen, openDrawer, closeDrawer, cartItems, addItemToCart, itemCount,removeItemFromCart, increaseQuantity, decreaseQuantity,clearCart,selectedSeat,setSelectedSeat,removeAllItemsFromCart }}>
       {children}
     </DrawerContext.Provider>
   );
