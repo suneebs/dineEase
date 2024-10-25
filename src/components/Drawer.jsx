@@ -19,7 +19,10 @@ export default function VaulDrawer() {
   const [timerActive, setTimerActive] = useState(false); // Track if the timer is active
   const [orderId, setOrderId] = useState(null); // Track order document ID
 
-  // Calculate total cost
+  // Calculate total cost for the drawer
+  const drawerTotalCost = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+
+  // Calculate total cost for order details
   const totalCost = orderDetails.reduce((total, item) => total + item.price * item.quantity, 0);
 
   // Function to handle order placement
@@ -31,7 +34,7 @@ export default function VaulDrawer() {
         // Create a new order document if there's no orderId
         const docRef = await addDoc(collection(db, 'Bills'), {
           items: cartItems,
-          totalCost: totalCost,
+          totalCost: drawerTotalCost,
           selectedSeat: selectedSeat,
           timestamp: new Date()
         });
@@ -108,11 +111,10 @@ export default function VaulDrawer() {
     try {
       await updateDoc(doc(db, 'Bills', orderId), {
         items: cartItems,
-        totalCost: totalCost,
+        totalCost: drawerTotalCost,
         timestamp: new Date()
       });
       setTimerActive(true); // Restart the timer
-      openDrawer(); // Reopen the drawer to allow adding more items
       setOrderModalOpen(false); // Close the order modal
     } catch (error) {
       console.error("Error updating order: ", error);
@@ -169,7 +171,7 @@ export default function VaulDrawer() {
               </div>
               {cartItems.length > 0 && (
                 <div className="mt-4">
-                  <span className="font-bold">Total Cost: ₹ {totalCost}</span>
+                  <span className="font-bold">Total Cost: ₹ {drawerTotalCost}</span> {/* Updated to drawerTotalCost */}
                   <div className="flex justify-end mt-4">
                     <Button className="bg-blue-500 hover:bg-blue-700" onClick={handleOrder}>
                       Order
