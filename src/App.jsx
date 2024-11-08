@@ -4,6 +4,7 @@ import MenuPage from './pages/MenuPage';  // Menu page for accessing the cart an
 import SeatBookingPage from './pages/SeatBookingPage';  // Page for seat booking
 import EditMenu from './pages/EditMenu';
 import BillsPage from './pages/BillsPage';
+import TableOrderDetailsPage from './pages/TableOrderDetailsPage';
 
 function App() {
   return (
@@ -14,6 +15,8 @@ function App() {
         <Route path="/book-seat" element={<SeatBookingPage />} />
         <Route path='/edit-menu' element={<EditMenu />}/>
         <Route path="/bills" element={<BillsPage />} />
+        <Route path="/table-orders" element={<TableOrderDetailsPage />} />
+        
       </Routes>
     </Router>
   );
