@@ -62,7 +62,7 @@ const EditMenu = () => {
         useWebWorker: true, // Use web worker for faster compression
       });
   
-      console.log('Compressed file:', compressedFile);
+      // console.log('Compressed file:', compressedFile);
   
       // Create a storage reference in Firebase
       const imageRef = ref(storage, `menuImages/${compressedFile.name}`);
@@ -72,7 +72,7 @@ const EditMenu = () => {
   
       // Get the download URL
       const downloadURL = await getDownloadURL(imageRef);
-      console.log("Download url is: ", downloadURL);
+      // console.log("Download url is: ", downloadURL);
       return downloadURL; // Return the download URL of the uploaded image
   
     } catch (error) {
@@ -93,9 +93,9 @@ const EditMenu = () => {
       let finalImageUrl = updatedItem.imageUrl; // Default to current image URL
   
       if (updatedItem.image) {
-        console.log("Uploading new image...");
+        // console.log("Uploading new image...");
         finalImageUrl = await handleImageUpload(updatedItem.image);
-        console.log("Image uploaded successfully. Final Image URL:", finalImageUrl);
+        // console.log("Image uploaded successfully. Final Image URL:", finalImageUrl);
   
         // Step 2: After image upload, update the image URL in the updatedFields state
         setUpdatedFields((prev) => ({
@@ -124,7 +124,7 @@ const EditMenu = () => {
       );
       setMenuItems(updatedItems);  // Update local state with the changes
       setEditItemId(null);  // Close the edit mode
-      console.log("Menu updated successfully.");
+      // console.log("Menu updated successfully.");
   
     } catch (error) {
       console.error("Error saving changes:", error);
@@ -154,7 +154,7 @@ const EditMenu = () => {
     let imageUrl = '';
     if (newItem.image) {
       imageUrl = await handleImageUpload(newItem.image);
-      console.log("Uploaded Image URL:", imageUrl);
+      // console.log("Uploaded Image URL:", imageUrl);
     }
 
     if (newItem.name && newItem.price && newItem.description && newItem.category) {

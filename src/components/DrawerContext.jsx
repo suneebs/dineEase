@@ -10,7 +10,7 @@ export const DrawerProvider = ({ children }) => {
   
   const openDrawer = () => setIsOpen(true);
   const closeDrawer = () => setIsOpen(false);
-  console.log("selectedSeat:", selectedSeat );
+  // console.log("selectedSeat:", selectedSeat );
   const addItemToCart = (item) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((i) => i.name === item.name);
