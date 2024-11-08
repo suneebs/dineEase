@@ -29,7 +29,7 @@ const SeatBookingPage = () => {
     e.preventDefault();
     if (name && phone) {
       setIsFormSubmitted(true);
-      alert('Form submitted successfully!');
+      // alert('Form submitted successfully!');
     } else {
       alert('Please enter both your name and phone number.');
     }
@@ -56,7 +56,7 @@ const SeatBookingPage = () => {
               customerName: name,
               phoneNumber: phone,
             });
-            alert(`Seat ${selectedSeat} booked and details saved to Firebase!`);
+            // alert(`Seat ${selectedSeat} booked and details saved to Firebase!`);
 
             // Redirect to the menu page with state
             navigate('/menu', { state: { canOrder: false } });  // Disable order button on menu page

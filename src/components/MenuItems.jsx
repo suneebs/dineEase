@@ -14,7 +14,7 @@ const MenuItems = ({ searchTerm, selectedCategory, selectedFoodType,selectedSeat
       const querySnapshot = await getDocs(collection(db, "menu"));
       const menuData = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setFood(menuData);
-      console.log("=--------------Seat:    ",selectedSeat);
+      // console.log("=--------------Seat:    ",selectedSeat);
       setSelectedSeat(selectedSeat);
     };
     fetchMenuItems();
@@ -46,7 +46,7 @@ const MenuItems = ({ searchTerm, selectedCategory, selectedFoodType,selectedSeat
   return (
     <div className="bg-slate-100 grid grid-cols-2 gap-8 pt-10 p-9 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
       {filteredFood.map((f) => (
-          <Card key={f.id} className="flex flex-col justify-between h-full">
+          <Card key={f.id} className="flex flex-col justify-between h-full shadow-md hover:shadow-md hover:shadow-black ">
             <CardHeader>
               <img src={f.imageUrl} alt={f.name} className="w-full h-32 object-cover" />
             </CardHeader>

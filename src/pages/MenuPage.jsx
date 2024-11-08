@@ -8,7 +8,7 @@ import menu from "@/assets/menu.png";
 const MenuPage = () => {
   return (
     <DrawerProvider>
-      <main className="relative">
+      <main className="relative flex flex-col min-h-screen">
         <Nav />
         <VaulDrawer />
         
@@ -20,13 +20,13 @@ const MenuPage = () => {
           <Search />
         </section> */}
         
-        <section className="padding">
+        <section className="flex-grow padding">
           <MenuContainer />
         </section>
         
-        <section className="bg-black flex justify-center">
+        <footer className="bg-black flex justify-center mt-auto w-full">
           <Footer />
-        </section>
+        </footer>
       </main>
     </DrawerProvider>
   );
