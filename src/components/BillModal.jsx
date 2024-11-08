@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from './ui/button';
 import { doc, getDoc, setDoc, getDocs, collection } from 'firebase/firestore';  // Firestore imports
 import { db } from '@/firebase'; // Import your firebase config
+import QR from "@/assets/scanQR.jpg"
 
 const handleDeleteTable = async (selectedSeat) => {
   
@@ -40,7 +41,7 @@ const BillModal = ({ cartItems, totalCost, onClose,selectedSeat }) => {
     await handleDeleteTable(selectedSeat);
     // Call the onClose function passed as a prop
     onClose();
-    console.log("BILL MODAL:", selectedSeat);
+    // console.log("BILL MODAL:", selectedSeat);
     
     // Refresh the page after closing the modal
     window.location.reload();
@@ -64,6 +65,9 @@ const BillModal = ({ cartItems, totalCost, onClose,selectedSeat }) => {
           )}
         </div>
         <p className="mt-4 font-bold">Total Cost: ₹ {totalCost}</p>
+        <div className='flex justify-center'>
+          <img src={QR} height={200} width={200} alt="QR Code" />
+        </div>
         <Button className="bg-blue-500 hover:bg-blue-700 mt-4" onClick={handleClose}>
           Close
         </Button>
