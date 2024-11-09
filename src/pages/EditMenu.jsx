@@ -238,7 +238,7 @@ const EditMenu = () => {
         </form>
       </div>
 
-      <div className="pl-6 pr-6 bg-slate-100">
+      <div className="pl-6 pr-6 ">
         <input
           type="text"
           placeholder="Search for an item..."
@@ -248,7 +248,7 @@ const EditMenu = () => {
         />
       </div>
 
-      <div className="bg-slate-100 grid grid-cols-2 gap-8 pt-10 p-9 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      <div className=" grid grid-cols-2 gap-8 pt-10 p-9 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {filteredItems.map((item) => (
           <Card key={item.id} className="flex flex-col justify-between h-full">
             <CardHeader>
