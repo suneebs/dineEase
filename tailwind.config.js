@@ -54,7 +54,16 @@ export default {
   				'5': 'hsl(var(--chart-5))'
   			}
   		}
-  	}
+  	},
+	fontSize:{
+		'nameSize':'2.8rem',
+		'smSize':'2rem'
+	},
+	fontFamily: {
+        'roboto': ['Roboto', 'sans-serif'],
+        'playfair': ['Playfair Display', 'serif'],
+        'montserrat': ['Montserrat', 'sans-serif'],
+	}
   },
   plugins: [require("tailwindcss-animate")],
 }

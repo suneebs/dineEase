@@ -3,7 +3,7 @@ import { CarouselSpacing } from "./Carousel";
 
 const Search = ({ setSearchTerm }) => {
     return (
-        <div className="p-10 flex justify-center">
+        <div className="p-4 pl-10 pr-10 flex justify-center">
             <section className="w-full flex justify-center ">
                 <div className="w-full">
                     <Input

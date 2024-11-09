@@ -6,6 +6,7 @@ import icon from "@/assets/icons/dish.png";
 import bill from "@/assets/icons/bill-icon.png";
 import { useDrawer } from './DrawerContext';
 import IconBill from './IconBill';
+import d from "@/assets/test.png"
 
 const Nav = () => {
   const { openDrawer, itemCount } = useDrawer();
@@ -15,9 +16,12 @@ const Nav = () => {
   const closeIconBill = () => setIconBillOpen(false);
 
   return (
-    <nav className='flex padding-x py-5 fixed z-10 w-full bg-slate-200 justify-between items-center max-container font-serif mb-5'>
-      <div className='font-extrabold ml-10'>
-         DineEase
+    <nav className='flex padding-x py-2 fixed z-10 w-full bg-gradient-to-r from-blue-200 via-indigo-200 to-purple-200  justify-between items-center max-container font-serif'>
+      <div className='ml-10 text-smSize md:text-nameSize font-playfair flex'>
+        <img src={d} alt="logo" className='h-10 w-10 md:h-14 md:w-14'/>
+        <p className=' pl-2 md:pl-5'>
+           D i n e E a s e
+        </p>
       </div>
       <div className="flex mr-10">
         <div className="mr-14 rounded-full flex justify-center items-center relative w-10 h-10 bg-gray-100">

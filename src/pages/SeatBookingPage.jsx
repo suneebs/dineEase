@@ -75,8 +75,8 @@ const SeatBookingPage = () => {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Book a Seat</h1>
+    <div className="min-h-screen p-4 bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 ">
+      <h1 className="text-nameSize font-playfair flex justify-center mb-4">Book a Seat</h1>
 
       <form onSubmit={handleSubmit} className="mb-6">
         <div className="mb-4">
@@ -108,13 +108,13 @@ const SeatBookingPage = () => {
         </div>
 
         <Button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Submit
+          Check Seat
         </Button>
       </form>
 
       {isFormSubmitted && (
         <div>
-          <p className="mb-4">Welcome, {name}! Please select a seat below:</p>
+          <p className="mb-4 font-bold font-montserrat">Welcome, {name}! Please select a seat below:</p>
           <div className="grid grid-cols-4 gap-4">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((seat) => (
               <Button 

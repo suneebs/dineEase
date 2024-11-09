@@ -17,14 +17,14 @@ const categories = [
 
 export function CarouselSpacing({ setSelectedCategory }) {
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center font-playfair">
       <Carousel className="max-w-sm md:max-w-max">
         <CarouselContent className="-ml-1">
           {categories.map((category, index) => (
             <CarouselItem key={index} className="pl-1 basis-1/3 md:basis-1/5">
               <div className="p-1">
                 <Card
-                  className="cursor-pointer"
+                  className="cursor-pointer hover:shadow-lg"
                   onClick={() => setSelectedCategory(category)} // Update the selected category
                 >
                   <CardContent className="flex items-center justify-center p-3">

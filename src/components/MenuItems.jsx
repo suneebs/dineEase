@@ -44,7 +44,7 @@ const MenuItems = ({ searchTerm, selectedCategory, selectedFoodType,selectedSeat
   });
 
   return (
-    <div className="bg-slate-100 grid grid-cols-2 gap-8 pt-10 p-9 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+    <div className="bg-gradient-to-r from-blue-200 via-indigo-200 to-purple-200  grid grid-cols-2 gap-8 pt-10 p-9 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
       {filteredFood.map((f) => (
           <Card key={f.id} className="flex flex-col justify-between h-full shadow-md hover:shadow-md hover:shadow-black ">
             <CardHeader>

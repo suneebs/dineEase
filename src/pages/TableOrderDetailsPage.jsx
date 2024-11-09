@@ -49,8 +49,8 @@ const TableOrderDetailsPage = () => {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4 flex justify-center font-serif">Table Order Details</h1>
+    <div className="p-4 bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 min-h-screen">
+      <h1 className="text-nameSize font-bold mb-4 flex justify-center font-playfair">Table Order Details</h1>
       <div className="overflow-auto bg-white shadow-md rounded p-4">
         <table className="min-w-full bg-white">
           <thead>

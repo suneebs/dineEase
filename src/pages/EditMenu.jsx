@@ -176,27 +176,17 @@ const EditMenu = () => {
   );
 
   return (
-    <div>
-      <div className='flex justify-center font-bold p-5'>
-        <h2>Edit Menu</h2>
+    <div className='bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 min-h-screen'>
+      <div className='flex justify-center font-bold p-3'>
+        <h1 className='font-playfair text-nameSize'>Edit Menu</h1>
       </div>
 
-      <div className='flex justify-center text-xl mb-4'>
+      <div className='flex justify-center font-playfair font-bold'>
         <p>Total Items: {menuItems.length}</p>
       </div>
 
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Search for an item..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="border p-2 w-full"
-        />
-      </div>
-
       <div className="bg-slate-100 p-5">
-        <h3>Add New Item</h3>
+        {/* <h3 className='flex justify-center font-playfair '>Add New Item</h3> */}
 
         {errorMessage && (
           <div className="text-red-500 mb-4">
@@ -246,6 +236,16 @@ const EditMenu = () => {
             Add Item
           </Button>
         </form>
+      </div>
+
+      <div className="pl-6 pr-6 bg-slate-100">
+        <input
+          type="text"
+          placeholder="Search for an item..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border p-2 w-full"
+        />
       </div>
 
       <div className="bg-slate-100 grid grid-cols-2 gap-8 pt-10 p-9 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">

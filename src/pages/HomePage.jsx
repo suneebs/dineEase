@@ -1,32 +1,53 @@
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import DLogo from "@/assets/D-logo.png";
+import DLogo from "@/assets/test.png";
 
 const HomePage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-black">
-
-      <div className='flex h-72 w-72'>
-        <img src={DLogo} alt="" srcset="" />
+    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 text-white p-6">
+      {/* Logo Section */}
+      <div className="flex justify-center items-center h-48 w-48">
+        <img src={DLogo} alt="LOGO" className="h-full w-full object-contain" />
       </div>
-      <h1 className="text-3xl font-bold mb-6 text-white">Welcome to Our Restaurant</h1>
-      <Button className="bg-blue-500 hover:bg-blue-700 mb-4" onClick={() => navigate('/menu')}>
-        Access Menu
-      </Button>
-      <Button className="bg-green-500 hover:bg-green-700 mb-4" onClick={() => navigate('/book-seat')}>
-        Book Seat
-      </Button>
-      <Button className="bg-green-500 hover:bg-green-700 mb-4" onClick={() => navigate('/edit-menu')}>
-        Edit Menu
-      </Button>
-      <Button className="bg-yellow-500 hover:bg-yellow-700 mb-4" onClick={() => navigate('/bills')}>
-        View Bills
-      </Button>
-      <Button className="bg-purple-500 hover:bg-purple-700" onClick={() => navigate('/table-orders')}>
-        View Table Orders
-      </Button>
+
+      {/* Main Content Area */}
+      <div className="space-y-6">
+        <div
+          onClick={() => navigate('/menu')}
+          className="cursor-pointer bg-transparent hover:bg-transparent text-center py-4 px-8 rounded-xl border-2 border-transparent hover:border-blue-500 shadow-lg transition duration-300 transform hover:scale-105"
+        >
+          <p className="text-xl font-semibold text-gray-200 font-playfair">Access Menu</p>
+        </div>
+
+        <div
+          onClick={() => navigate('/book-seat')}
+          className="cursor-pointer bg-transparent hover:bg-transparent text-center py-4 px-8 rounded-xl border-2 border-transparent hover:border-green-500 shadow-lg transition duration-300 transform hover:scale-105"
+        >
+          <p className="text-xl font-semibold text-gray-200 font-playfair">Book Seat</p>
+        </div>
+
+        <div
+          onClick={() => navigate('/edit-menu')}
+          className="cursor-pointer bg-transparent hover:bg-transparent text-center py-4 px-8 rounded-xl border-2 border-transparent hover:border-purple-500 shadow-lg transition duration-300 transform hover:scale-105"
+        >
+          <p className="text-xl font-semibold text-gray-200 font-playfair">Edit Menu</p>
+        </div>
+
+        <div
+          onClick={() => navigate('/bills')}
+          className="cursor-pointer bg-transparent hover:bg-transparent text-center py-4 px-8 rounded-xl border-2 border-transparent hover:border-yellow-500 shadow-lg transition duration-300 transform hover:scale-105"
+        >
+          <p className="text-xl font-semibold text-gray-200 font-playfair">View Bills</p>
+        </div>
+
+        <div
+          onClick={() => navigate('/table-orders')}
+          className="cursor-pointer bg-transparent hover:bg-transparent text-center py-4 px-8 rounded-xl border-2 border-transparent hover:border-indigo-500 shadow-lg transition duration-300 transform hover:scale-105"
+        >
+          <p className="text-xl font-semibold text-gray-200 font-playfair">View Table Orders</p>
+        </div>
+      </div>
     </div>
   );
 };

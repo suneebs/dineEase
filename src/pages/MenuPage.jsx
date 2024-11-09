@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import MenuContainer from "@/components/MenuContainer";
 import Nav from "@/components/Nav";
 import { DrawerProvider } from '@/components/DrawerContext';
-import menu from "@/assets/menu.png";
+import menu from "@/assets/caption.png";
 
 const MenuPage = () => {
   return (
@@ -12,8 +12,8 @@ const MenuPage = () => {
         <Nav />
         <VaulDrawer />
         
-        <section className="flex justify-center pt-20">
-          <img src={menu} height={200} width={200} alt="menu" />
+        <section className="flex justify-center pt-28 bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 ">
+          <img src={menu}  alt="menu" />
         </section>
         
         {/* <section className="padding">
