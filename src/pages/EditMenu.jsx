@@ -167,6 +167,7 @@ const EditMenu = () => {
       });
       setMenuItems([...menuItems, { id: docRef.id, ...newItem, imageUrl }]);
       setNewItem({ name: '', price: '', description: '', category: '', image: null }); // Reset form fields
+      document.getElementById('image-input').value = '';
     }
   };
 
@@ -229,6 +230,7 @@ const EditMenu = () => {
           <input
             type="file"
             accept="image/*"
+            id ='image-input'
             onChange={(e) => setNewItem({ ...newItem, image: e.target.files[0] })}
             className="border p-2 w-full"
           />

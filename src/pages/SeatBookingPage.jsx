@@ -59,7 +59,8 @@ const SeatBookingPage = () => {
             // alert(`Seat ${selectedSeat} booked and details saved to Firebase!`);
 
             // Redirect to the menu page with state
-            navigate('/menu', { state: { canOrder: false } });  // Disable order button on menu page
+            alert("Seat is successfully booked")
+            navigate('/', { state: { canOrder: false } });  // Disable order button on menu page
           } else {
             // Table is already booked
             alert(`Seat ${selectedSeat} is already booked. Please choose another seat.`);
@@ -108,7 +109,7 @@ const SeatBookingPage = () => {
         </div>
 
         <Button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Check Seat
+          Check Table
         </Button>
       </form>
 
@@ -116,14 +117,23 @@ const SeatBookingPage = () => {
         <div>
           <p className="mb-4 font-bold font-montserrat">Welcome, {name}! Please select a seat below:</p>
           <div className="grid grid-cols-4 gap-4">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((seat) => (
+            {[
+              {seat:1,capacity:2},
+              {seat:2,capacity:4},
+              {seat:3,capacity:8},
+              {seat:4,capacity:6},
+              {seat:5,capacity:4},
+              {seat:6,capacity:2},
+              {seat:7,capacity:4},
+              {seat:8,capacity:6},
+            ].map(({seat,capacity}) => (
               <Button 
                 key={seat} 
-                className={`p-4 ${bookedSeats.includes(seat) ? 'bg-red-500' : (selectedSeat === seat ? 'bg-green-500' : 'bg-gray-300')} hover:bg-gray-400`}
+                className={`p-4 ${bookedSeats.includes(seat) ? 'bg-red-600' : (selectedSeat === seat ? 'bg-green-500' : 'bg-gray-400')} hover:bg-gray-500`}
                 onClick={() => !bookedSeats.includes(seat) && bookSeat(seat)}  // Disable booking for already booked seats
                 disabled={bookedSeats.includes(seat)}  // Disable the button if the seat is already booked
               >
-                Seat {seat}
+                Table {seat} ({capacity} seats)
               </Button>
             ))}
           </div>

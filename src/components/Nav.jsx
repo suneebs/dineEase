@@ -30,7 +30,7 @@ const Nav = () => {
             {itemCount}
           </span>
         </div>
-        <div onClick={openIconBill} className="cursor-pointer ">
+        <div onClick={openIconBill} className="cursor-pointer hidden">
           <img src={bill} alt="bill" className="w-10" />
         </div>
       </div>
