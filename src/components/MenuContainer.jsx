@@ -58,10 +58,10 @@ const MenuContainer = () => {
   };
 
   return (
-    <div>
+    <div className='min-h-screen bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 '>
       {/* Seat selection dropdown at the top */}
-      <section className='mb-6 lg:ml-96 lg:mr-96'>
-        <label htmlFor="seat-select" className="block mb-2 text-sm font-bold text-gray-700">Select Table:</label>
+      <section className='lg:ml-96 lg:mr-96'>
+        <label htmlFor="seat-select" className="block mb-2 text-sm font-playfair font-bold text-gray-700">Select Table:</label>
         <select
           id="seat-select"
           value={selectedSeat}
@@ -103,7 +103,7 @@ const MenuContainer = () => {
 
       {/* Display welcome message and menu if authenticated */}
       {isAuthenticated && customerDetails && (
-        <section className="mb-6 lg:ml-96 lg:mr-96">
+        <section className="lg:ml-96 lg:mr-96">
           <h2 className="text-lg font-bold">Welcome, {customerDetails.customerName}!</h2>
           <p>You are now authenticated for Table {selectedSeat}. You can access the menu below.</p>
         </section>
@@ -124,7 +124,7 @@ const MenuContainer = () => {
             <FoodTypeFilter setSelectedFoodType={setSelectedFoodType} />
           </section>
 
-          <section className='mt-20'>
+          <section className='mt-2 '>
             <MenuItems
               searchTerm={searchTerm}
               selectedCategory={selectedCategory}

@@ -167,6 +167,7 @@ const EditMenu = () => {
       });
       setMenuItems([...menuItems, { id: docRef.id, ...newItem, imageUrl }]);
       setNewItem({ name: '', price: '', description: '', category: '', image: null }); // Reset form fields
+      document.getElementById('image-input').value = '';
     }
   };
 
@@ -176,27 +177,17 @@ const EditMenu = () => {
   );
 
   return (
-    <div>
-      <div className='flex justify-center font-bold p-5'>
-        <h2>Edit Menu</h2>
+    <div className='bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 min-h-screen'>
+      <div className='flex justify-center font-bold p-3'>
+        <h1 className='font-playfair text-nameSize'>Edit Menu</h1>
       </div>
 
-      <div className='flex justify-center text-xl mb-4'>
+      <div className='flex justify-center font-playfair font-bold'>
         <p>Total Items: {menuItems.length}</p>
       </div>
 
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Search for an item..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="border p-2 w-full"
-        />
-      </div>
-
       <div className="bg-slate-100 p-5">
-        <h3>Add New Item</h3>
+        {/* <h3 className='flex justify-center font-playfair '>Add New Item</h3> */}
 
         {errorMessage && (
           <div className="text-red-500 mb-4">
@@ -239,6 +230,7 @@ const EditMenu = () => {
           <input
             type="file"
             accept="image/*"
+            id ='image-input'
             onChange={(e) => setNewItem({ ...newItem, image: e.target.files[0] })}
             className="border p-2 w-full"
           />
@@ -248,7 +240,17 @@ const EditMenu = () => {
         </form>
       </div>
 
-      <div className="bg-slate-100 grid grid-cols-2 gap-8 pt-10 p-9 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      <div className="pl-6 pr-6 ">
+        <input
+          type="text"
+          placeholder="Search for an item..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border p-2 w-full"
+        />
+      </div>
+
+      <div className=" grid grid-cols-2 gap-8 pt-10 p-9 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {filteredItems.map((item) => (
           <Card key={item.id} className="flex flex-col justify-between h-full">
             <CardHeader>
